@@ -1,10 +1,13 @@
 import fs from "fs";
 import path from "path";
-import { pathToFileURL } from "url";
+import chalk from "chalk";
 
 export default async (client) => {
-    const commandsPath = path.join(process.cwd(), "Commands", "Prefix");
-    if (!fs.existsSync(commandsPath)) return 0;
+    const commandsPath = path.join(process.cwd(), "src", "Commands", "Prefix");
+    if (!fs.existsSync(commandsPath)) {
+        console.log(chalk.yellow("[Prefix] No commands found"));
+        return 0;
+    }
 
     function getAllFiles(dirPath, arrayOfFiles = []) {
         const files = fs.readdirSync(dirPath);
@@ -24,12 +27,13 @@ export default async (client) => {
     const commandFiles = getAllFiles(commandsPath);
 
     for (const file of commandFiles) {
-        const fileURL = pathToFileURL(file).href;
-        const command = (await import(fileURL)).default;
+        const command = (await import(`file:///${file.replace(/\\/g, "/")}`)).default;
         if (command && command.name) {
             client.prefixCommands.set(command.name, command);
         }
     }
+
+    console.log(chalk.green(`[Prefix] ${client.prefixCommands.size} commands loaded`));
 
     return client.prefixCommands.size;
 };

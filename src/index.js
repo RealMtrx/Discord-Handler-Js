@@ -7,8 +7,13 @@ import loadModels from "./Handlers/Models.js";
 import { startupReport } from "./Handlers/logger.js";
 import AntiCrash from "./Handlers/AntiCrash.js";
 import connectMongo from "./Database/mongo.js";
+import chalk from "chalk";
 
 async function main() {
+    console.log(chalk.cyan("╔══════════════════════════════════╗"));
+    console.log(chalk.cyan("║     Starting Discord Handler     ║"));
+    console.log(chalk.cyan("╚══════════════════════════════════╝\n"));
+
     const client = new Client({
         intents: [
             GatewayIntentBits.Guilds,
@@ -22,14 +27,29 @@ async function main() {
     client.prefixCommands = new Collection();
     client.config = config;
 
+    console.log(chalk.blue("[System] Initializing AntiCrash..."));
     const anticrashActive = AntiCrash(client);
+    console.log(anticrashActive ? chalk.green("[System] AntiCrash active") : chalk.red("[System] AntiCrash failed"));
 
+    console.log(chalk.blue("[System] Connecting to MongoDB..."));
     const mongoConnected = await connectMongo();
+    console.log(mongoConnected ? chalk.green("[System] MongoDB connected") : chalk.red("[System] MongoDB connection failed"));
 
+    console.log(chalk.blue("[System] Loading slash commands..."));
     const slashCount = await loadCommands(client);
+    console.log(chalk.green(`[System] ${slashCount} slash commands loaded`));
+
+    console.log(chalk.blue("[System] Loading prefix commands..."));
     const prefixCount = await loadPrefix(client);
+    console.log(chalk.green(`[System] ${prefixCount} prefix commands loaded`));
+
+    console.log(chalk.blue("[System] Loading events..."));
     const eventsCount = await loadEvents(client);
+    console.log(chalk.green(`[System] ${eventsCount} events loaded`));
+
+    console.log(chalk.blue("[System] Loading models..."));
     const modelsCount = await loadModels(client);
+    console.log(chalk.green(`[System] ${modelsCount} models loaded`));
 
     startupReport({
         name: config.botName,

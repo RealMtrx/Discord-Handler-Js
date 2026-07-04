@@ -2,7 +2,7 @@ import { REST, Routes } from "discord.js";
 import fs from "fs";
 import path from "path";
 import config from "../config.js";
-import { pathToFileURL } from "url";
+import chalk from "chalk";
 
 function getAllFiles(dirPath, arrayOfFiles = []) {
     const files = fs.readdirSync(dirPath);
@@ -21,9 +21,12 @@ function getAllFiles(dirPath, arrayOfFiles = []) {
 
 export default async (client) => {
     const slashCommands = [];
-    const commandsPath = path.join(process.cwd(), "Commands", "Slash");
+    const commandsPath = path.join(process.cwd(), "src", "Commands", "Slash");
 
-    if (!fs.existsSync(commandsPath)) return 0;
+    if (!fs.existsSync(commandsPath)) {
+        console.log(chalk.yellow("[Slash] No commands found"));
+        return 0;
+    }
 
     const commandFiles = getAllFiles(commandsPath);
 
@@ -36,13 +39,16 @@ export default async (client) => {
         }
     }
 
+    console.log(chalk.green(`[Slash] ${slashCommands.length} commands loaded`));
+
     try {
         const rest = new REST({ version: "10" }).setToken(config.token);
         if (slashCommands.length) {
             await rest.put(Routes.applicationCommands(config.clientId), { body: slashCommands });
+            console.log(chalk.green("[Slash] Registered with Discord API"));
         }
     } catch (e) {
-        console.error("[Commands] Failed to register slash commands", e);
+        console.error(chalk.red("[Slash] Failed to register:"), e.message);
     }
 
     return slashCommands.length;
