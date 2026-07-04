@@ -68,8 +68,8 @@ Discord-Handler/
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/yourusername/Discord-Handler.git
-   cd Discord-Handler
+   git clone https://github.com/RealMtrx/Discord-Handler-Js.git
+   cd Discord-Handler-Js
    ```
 
 2. **Install dependencies**
