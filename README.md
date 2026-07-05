@@ -2,7 +2,7 @@
 
 A modern, feature-rich Discord bot handler built with **Discord.js v14**, featuring both slash commands and prefix commands with a robust modular architecture designed for scalability and maintainability.
 
-## 🚀 Features
+## Features
 
 - **Dual Command System**: Support for both slash commands and prefix commands
 - **Modular Architecture**: Clean separation of concerns with dedicated handlers
@@ -13,7 +13,7 @@ A modern, feature-rich Discord bot handler built with **Discord.js v14**, featur
 - **Cooldown System**: Per-command cooldown management
 - **Environment Configuration**: Secure configuration management with dotenv
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 Discord-Handler-Js/
@@ -56,7 +56,7 @@ Discord-Handler-Js/
 │           └── Public/ping.js    # Example slash ping command
 ```
 
-## 🔧 Installation
+## Installation
 
 1. **Clone the repository**
 
@@ -92,7 +92,7 @@ Discord-Handler-Js/
    npm start
    ```
 
-## 📋 Dependencies
+## Dependencies
 
 - **discord.js**: ^14.11.0 - Discord API wrapper
 - **mongoose**: ^7.5.0 - MongoDB ODM
@@ -100,7 +100,7 @@ Discord-Handler-Js/
 - **boxen**: ^7.0.0 - Boxed UI for startup report
 - **chalk**: ^5.3.0 - Terminal colors
 
-## 📝 Command Development
+## Command Development
 
 ### Creating Slash Commands
 
