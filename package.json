@@ -1,7 +1,7 @@
 {
-  "name": "bot-handler",
-  "version": "1.0.0",
-  "description": "Discord Handler",
+  "name": "discord-handler-js",
+  "version": "0.9.0",
+  "description": "A production-ready Discord bot framework built with Discord.js v14 and MongoDB — slash commands, prefix commands, anti-crash, webhook logging, and a modular src/ architecture.",
   "main": "src/index.js",
   "type": "module",
   "scripts": {
@@ -11,13 +11,11 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "all": "^0.0.0",
     "boxen": "^7.0.0",
     "chalk": "^5.3.0",
     "discord.js": "^14.11.0",
     "dotenv": "^17.2.1",
     "mongoose": "^7.5.0",
-    "node-fetch": "^3.3.2",
-    "puppeteer": "^24.16.0"
+    "node-fetch": "^3.3.2"
   }
 }
