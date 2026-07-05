@@ -1,4 +1,4 @@
-# Discord Handler
+# Discord Handler JavaScript
 
 A modern, feature-rich Discord bot handler built with **Discord.js v14**, featuring both slash commands and prefix commands with a robust modular architecture designed for scalability and maintainability.
 
@@ -8,7 +8,9 @@ A modern, feature-rich Discord bot handler built with **Discord.js v14**, featur
 - **Modular Architecture**: Clean separation of concerns with dedicated handlers
 - **Anti-Crash System**: Comprehensive error handling and monitoring
 - **Event-Driven**: Fully event-driven architecture
-- **ES6 Modules**: Modern JavaScript with ES6 module syntax
+- **Webhook Logging**: Real-time logging for errors and guild events
+- **MongoDB Integration**: Persistent data storage with Mongoose
+- **Cooldown System**: Per-command cooldown management
 - **Environment Configuration**: Secure configuration management with dotenv
 
 ## 📁 Project Structure
@@ -49,11 +51,9 @@ Discord-Handler-Js/
 │   │   └── config.js             # Bot configuration model
 │   └── Commands/
 │       ├── Prefix/               # Prefix commands
-│       │   └── Public/
-│       │       └── ping.js       # Example prefix ping command
+│       │   └── Public/ping.js    # Example prefix ping command
 │       └── Slash/                # Slash commands
-│           └── Public/
-│               └── ping.js       # Example slash ping command
+│           └── Public/ping.js    # Example slash ping command
 ```
 
 ## 🔧 Installation
@@ -73,23 +73,18 @@ Discord-Handler-Js/
 
 3. **Environment Setup**
 
-   Open `src/config.js` file and set the following variables:
+   Copy `.env.example` to `.env` and fill in your values:
 
-   ```javascript
-   token: "your_bot_token",
-   clientId: "your_client_id",
-   prefix: "your_prefix",
-   ownerIds: ["owner_id_1", "owner_id_2"],
-   MONGODB_URI: "your_mongo_uri",
-   errorWebhook: "your_error_webhook",
-   slashCommandWebhook: "your_slash_webhook",
-   prefixCommandWebhook: "your_prefix_webhook",
-   joinGuildWebhook: "your_join_webhook",
-   leaveGuildWebhook: "your_leave_webhook",
-   readyWebhook: "your_ready_webhook",
+   ```env
+   TOKEN=your_bot_token_here
+   PREFIX=!
+   BOT_NAME=Discord Handler
+   MONGO_URI=mongodb://localhost:27017/discord-handler
+   ERROR_WEBHOOK=https://discord.com/api/webhooks/your_webhook
+   GUILD_LOG_WEBHOOK=https://discord.com/api/webhooks/your_webhook
    ```
 
-   ⚠️ **Security Note**: Never commit your `config.js` file to version control!
+   ⚠️ **Security Note**: Never commit your `.env` file to version control!
 
 4. **Run the bot**
 
@@ -100,17 +95,16 @@ Discord-Handler-Js/
 ## 📋 Dependencies
 
 - **discord.js**: ^14.11.0 - Discord API wrapper
-- **@discordjs/rest**: ^2.5.1 - REST API client
-- **discord-api-types**: ^0.38.14 - TypeScript definitions
-- **dotenv**: ^16.3.1 - Environment variable management
-- **axios**: ^1.10.0 - HTTP client for webhooks
-- **node-fetch**: ^3.3.2 - Fetch API for Node.js
+- **mongoose**: ^7.5.0 - MongoDB ODM
+- **dotenv**: ^17.2.1 - Environment variable management
+- **boxen**: ^7.0.0 - Boxed UI for startup report
+- **chalk**: ^5.3.0 - Terminal colors
 
 ## 📝 Command Development
 
 ### Creating Slash Commands
 
-Create new slash commands in `src/Commands/Slash/[category]/[command].js`:
+Create a new file in `src/Commands/Slash/[category]/[name].js`:
 
 ```javascript
 import { SlashCommandBuilder } from 'discord.js';
@@ -119,7 +113,6 @@ export default {
   data: new SlashCommandBuilder()
     .setName('commandname')
     .setDescription('Command description'),
-
   async execute(interaction) {
     await interaction.reply('Response');
   }
@@ -128,13 +121,12 @@ export default {
 
 ### Creating Prefix Commands
 
-Create new prefix commands in `src/Commands/Prefix/[category]/[command].js`:
+Create a new file in `src/Commands/Prefix/[category]/[name].js`:
 
 ```javascript
 export default {
   name: 'commandname',
   description: 'Command description',
-  aliases: ['alias1', 'alias2'],
   execute(client, message, args) {
     message.reply('Response');
   }
